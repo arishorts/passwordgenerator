@@ -5,7 +5,7 @@ let uppercase_chars = false;
 let number_chars = false;
 let special_chars = false;
 
-userInput();
+simulatedUserInput();
 function userInput() {
   length = 8;
   lowercase_chars = false;
@@ -34,14 +34,13 @@ generatePassword();
 
 // Assignment code here
 function generatePassword() {
-  //ask for user input
-  userInput();
+  simulatedUserInput(); //ask for user input
   generateCharset();
   if (charset == "") {
-    return "At least one type of character must be selected";
+    return "At least one type of character must be selected.";
   }
-  if (length < 8) {
-    return "Password must be over 8 chars";
+  if (length < 8 || length > 128) {
+    return "Password must be over 8 and less than 128 characters.";
   }
   const passwordLength = length;
   let passwordContent = "";
