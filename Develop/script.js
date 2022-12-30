@@ -55,7 +55,6 @@ function generateCharset() {
   } else {
     charset = "";
   }
-  console.log(charset);
 }
 
 function validation() {
@@ -66,7 +65,6 @@ function validation() {
   if (length >= 8 && length <= 128) {
     return "Password must be over 8 and less than 128 characters.";
   }
-  console.log(charset);
 }
 
 // function randomization() {
