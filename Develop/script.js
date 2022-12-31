@@ -1,98 +1,112 @@
-let length = 0;
-let lowercase_chars = false;
-let uppercase_chars = false;
-let number_chars = false;
-let special_chars = false;
-let charset = "";
+function InitiatePassword(
+  length,
+  lowercase,
+  uppercase,
+  numbers,
+  special,
+  charset
+) {
+  this.length = length;
+  this.lowercase_chars = lowercase;
+  this.uppercase_chars = uppercase;
+  this.numbers_chars = numbers;
+  this.special_chars = special;
+  this.charset = charset;
+}
 
 function simulatedUserInput() {
-  length = 10;
-  lowercase_chars = false;
-  uppercase_chars = false;
-  number_chars = false;
+  length = 9;
+  lowercase_chars = true;
+  uppercase_chars = true;
+  numbers_chars = true;
   special_chars = true;
+  let charset = "";
 }
 
-function userInput() {
-  //How to cancel all prompts if one of them is cancelled
-  let input_length = prompt("Please enter a password length", "0");
-  let input_lowercase = prompt("Include lowercase characters?", "Y/N");
-  let input_uppercase = prompt("Include uppercase characters?", "Y/N");
-  let input_number = prompt("Include numeric characters?", "Y/N");
-  let input_special = prompt("Include special characters?", "Y/N");
-  //toUpperCase is not working
-  lowercase_chars = input_lowercase == "y" ? true : false;
-  uppercase_chars = input_uppercase == "y" ? true : false;
-  number_chars = input_number == "y" ? true : false;
-  special_chars = input_special == "y" ? true : false;
-  length = input_length;
-  lowercase_chars = input_lowercase;
-  uppercase_chars = input_uppercase;
-  number_chars = input_number;
-  special_chars = input_special;
+function userInputAndValidation(pass) {
+  let input_length = Number(prompt("Please enter a password length", "0"));
+  let input_lowercase = prompt(
+    "Include lowercase characters?",
+    "Y/N"
+  ).toUpperCase();
+  if (input_lowercase !== "Y" && input_lowercase !== "N") {
+    throw new Error(alert("Improper input."));
+  }
+  let input_uppercase = prompt(
+    "Include uppercase characters?",
+    "Y/N"
+  ).toUpperCase();
+  if (input_uppercase != "Y" && input_uppercase != "N") {
+    throw new Error(alert("Improper input."));
+  }
+  let input_numbers = prompt(
+    "Include numeric characters?",
+    "Y/N"
+  ).toUpperCase();
+  if (input_numbers !== "Y" && input_numbers !== "N") {
+    throw new Error(alert("Improper input."));
+  }
+  let input_special = prompt(
+    "Include special characters?",
+    "Y/N"
+  ).toUpperCase();
+  if (input_special !== "Y" && input_special !== "N") {
+    throw new Error(alert("Improper input."));
+  }
+  //ternary operator not working
+  pass.lowercase_chars = input_lowercase == "Y" ? true : false;
+  pass.uppercase_chars = input_uppercase == "Y" ? true : false;
+  pass.numbers_chars = input_numbers == "Y" ? true : false;
+  pass.special_chars = input_special == "Y" ? true : false;
+  pass.length = input_length;
 }
 
-function generateCharset() {
-  if (number_chars == "Y" || number_chars == "YES" || number_chars == "y") {
-    charset += "1234567890";
+function generateCharset(pass) {
+  if (pass.numbers_chars) {
+    pass.charset += "1234567890";
   }
-  if (
-    lowercase_chars == "Y" ||
-    lowercase_chars == "YES" ||
-    lowercase_chars == "y"
-  ) {
-    charset += "abcdefghijklmnopqrstuvwxyz";
+  if (pass.lowercase_chars) {
+    pass.charset += "abcdefghijklmnopqrstuvwxyz";
   }
-  if (
-    uppercase_chars == "Y" ||
-    uppercase_chars == "YES" ||
-    uppercase_chars == "y"
-  ) {
-    charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if (pass.uppercase_chars) {
+    pass.charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   }
-  if (special_chars == "Y" || special_chars == "YES" || special_chars == "y") {
-    charset += "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
-  } else {
-    charset = "";
+  if (pass.special_chars) {
+    pass.charset += "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
   }
 }
 
-function validation() {
-  //how to stop the generation if validation is not met?
-  if (charset == "") {
-    return "At least one type of character must be selected.";
+function furtherValidation(pass) {
+  //is there a better way than throwing an error?
+  if (pass.charset == "") {
+    throw new Error(alert("At least one type of character must be selected."));
   }
-  if (length >= 8 && length <= 128) {
-    return "Password must be over 8 and less than 128 characters.";
+  if (pass.length <= 8 || pass.length >= 128) {
+    throw new Error(
+      alert("Password must be over 8 and less than 128 characters.")
+    );
   }
 }
 
-// function randomization() {
-//   const passwordLength = Number(length);
-//   console.log(charset);
-//   console.log(passwordLength);
-//   for (index = 0; index < passwordLength; index++) {
-//     const randomValue = Math.floor(Math.random() * charset.length);
-//     passwordContent += charset.charAt(randomValue);
-//   }
-// return passwordContent
-// }
+function randomization(pass) {
+  let passwordContent = "";
+  const passwordLength = pass.length;
+  for (index = 0; index < passwordLength; index++) {
+    const randomValue = Math.floor(Math.random() * pass.charset.length);
+    passwordContent += pass.charset.charAt(randomValue);
+  }
+  return passwordContent;
+}
 
 // Assignment code here
 function generatePassword() {
-  //is there a way to bring the global variables in here so they can be reset easily? currently i have to do it manually
-  //simulatedUserInput();
-  userInput();
-  generateCharset();
-  validation();
+  var pass = new InitiatePassword(0, false, false, false, false, "a");
   let passwordContent = "";
-  const passwordLength = Number(length);
-  for (index = 0; index < passwordLength; index++) {
-    const randomValue = Math.floor(Math.random() * charset.length);
-    passwordContent += charset.charAt(randomValue);
-  }
-  return passwordContent;
-  //i tried making this it's own randomization function, but then it wouldnt work. see above
+  //simulatedUserInput();
+  userInputAndValidation(pass);
+  generateCharset(pass);
+  furtherValidation(pass);
+  return randomization(pass);
 }
 
 // Get references to the #generate element
