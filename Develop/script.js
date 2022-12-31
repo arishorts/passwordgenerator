@@ -25,6 +25,11 @@ function simulatedUserInput() {
 
 function userInputAndValidation(pass) {
   let input_length = Number(prompt("Please enter a password length", "0"));
+  if (input_length < 8 || input_length > 128) {
+    throw new Error(
+      alert("Password must be at least 8 and no more than 128 characters.")
+    );
+  }
   let input_lowercase = prompt(
     "Include lowercase characters?",
     "Y/N"
@@ -81,11 +86,6 @@ function furtherValidation(pass) {
   if (pass.charset == "") {
     throw new Error(alert("At least one type of character must be selected."));
   }
-  if (pass.length <= 8 || pass.length >= 128) {
-    throw new Error(
-      alert("Password must be over 8 and less than 128 characters.")
-    );
-  }
 }
 
 function randomization(pass) {
@@ -100,7 +100,7 @@ function randomization(pass) {
 
 // Assignment code here
 function generatePassword() {
-  var pass = new InitiatePassword(0, false, false, false, false, "a");
+  var pass = new InitiatePassword(0, false, false, false, false, "");
   let passwordContent = "";
   //simulatedUserInput();
   userInputAndValidation(pass);
