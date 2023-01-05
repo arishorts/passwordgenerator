@@ -14,6 +14,7 @@ function InitiatePassword(
   this.charset = charset;
 }
 
+//0) This was used to simulate a input for testing and debugging
 function simulatedUserInput() {
   length = 9;
   lowercase_chars = true;
@@ -22,7 +23,7 @@ function simulatedUserInput() {
   special_chars = true;
   let charset = "";
 }
-
+//1) Takes user input via alert fields
 function userInputAndValidation(pass) {
   let input_length = Number(prompt("Please enter a password length", "0"));
   if (input_length < 8 || input_length > 128) {
@@ -58,7 +59,6 @@ function userInputAndValidation(pass) {
   if (input_special !== "Y" && input_special !== "N") {
     throw new Error(alert("Improper input."));
   }
-  //ternary operator not working
   pass.lowercase_chars = input_lowercase == "Y" ? true : false;
   pass.uppercase_chars = input_uppercase == "Y" ? true : false;
   pass.numbers_chars = input_numbers == "Y" ? true : false;
@@ -66,6 +66,7 @@ function userInputAndValidation(pass) {
   pass.length = input_length;
 }
 
+//2) Generates a character set based on all possible values.
 function generateCharset(pass) {
   if (pass.numbers_chars) {
     pass.charset += "1234567890";
@@ -80,14 +81,15 @@ function generateCharset(pass) {
     pass.charset += "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
   }
 }
-
+//3) Performs a followup validation for certainty.
 function furtherValidation(pass) {
-  //is there a better way than throwing an error?
   if (pass.charset == "") {
     throw new Error(alert("At least one type of character must be selected."));
   }
 }
 
+//4) Supplies random values, up to the numbers of characters in the character set from step 2, and corresponds it with one of the values in the character set.
+//5) Adds this value a string representing the final password. Loops until all values are generated.
 function randomization(pass) {
   let passwordContent = "";
   const passwordLength = pass.length;
