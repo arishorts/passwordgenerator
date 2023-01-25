@@ -14,7 +14,7 @@ function InitiatePassword(
   this.charset = charset;
 }
 
-//0) This was used to simulate a input for testing and debugging
+//0) This was used to simulate an input for testing and debugging
 function simulatedUserInput() {
   length = 9;
   lowercase_chars = true;
